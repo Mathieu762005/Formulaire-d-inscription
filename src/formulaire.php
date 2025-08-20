@@ -1,3 +1,34 @@
+<?php
+$erreurs = [];
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // 1. Récupération et nettoyage des données
+    $nom = trim($_POST["nom"] ?? '');
+    $prenom = trim($_POST["prenom"] ?? '');
+    $email = trim($_POST["email"] ?? '');
+    $pays = trim($_POST["pays"] ?? '');
+    $message = trim($_POST["message"] ?? '');
+    $genre = $_POST["genre"] ?? '';
+    $cgu = isset($_POST["cgu"]) ? "Acceptées" : '';
+
+    // 2. Vérifications
+    if (empty($nom)) $erreurs[] = "Le champ 'Nom' est obligatoire.";
+    if (empty($prenom)) $erreurs[] = "Le champ 'Prénom' est obligatoire.";
+    if (empty($email)) $erreurs[] = "Le champ 'Email' est obligatoire.";
+    if (empty($pays)) $erreurs[] = "Le champ 'Pays' est obligatoire.";
+    if (empty($message)) $erreurs[] = "Le champ 'Message' est obligatoire.";
+    if (empty($genre)) $erreurs[] = "Le champ 'Genre' est obligatoire.";
+    if (empty($cgu)) $erreurs[] = "Vous devez accepter les CGU.";
+
+    // 3. Redirection si tout est OK
+    if (empty($erreurs)) {
+        header("Location: confirmation.php");
+        exit;
+    }
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -15,22 +46,22 @@
             <h1 class="text-center mt-5 fw-bold">Formulaire</h1>
         </div>
         <div class="formulaire container border rounded-4 mt-5">
-            <form class="row g-3 p-5" method="POST" action="comfirmation.php">
+            <form class="row g-3 p-5" method="POST" action="" novalidate>
                 <div class="col-md-6">
                     <label for="inputEmail4" class="form-label">Nom</label>
-                    <input type="text" name="nom" pattern="[a-zA-ZÀ-ÿ\- ]+" class="form-control" id="inputEmail4" required>
+                    <input type="text" name="nom" class="form-control" id="inputEmail4">
                 </div>
                 <div class="col-md-6">
                     <label for="inputPassword4" class="form-label">Prénom</label>
-                    <input type="text" name="prenom" pattern="[a-zA-ZÀ-ÿ\- ]+" class="form-control" id="inputPassword4" required>
+                    <input type="text" name="prenom" class="form-control" id="inputPassword4">
                 </div>
                 <div class="col-12">
                     <label for="inputAddress" class="form-label">E-mail</label>
-                    <input type="email" name="email" class="form-control" id="inputAddress" required>
+                    <input type="email" name="email" class="form-control" id="inputAddress">
                 </div>
                 <div class="col-md-6">
                     <label for="inputCity" class="form-label">Pays</label>
-                    <input type="text" name="pays" pattern="[a-zA-ZÀ-ÿ\- ]+" class="form-control" id="inputCity" required>
+                    <input type="text" name="pays" class="form-control" id="inputCity">
                 </div>
                 <div class="mb-3">
                     <label for="exampleFormControlTextarea1" class="form-label">Message</label>
@@ -55,19 +86,9 @@
                     </div>
                 </div>
                 <div class="col-12">
-                        <button type="submit" class="btn btn-primary" onclick="window.location.href='confirmation.php'">Confirmer mon inscription</button>
+                    <button type="submit" class="btn btn-primary">Confirmer mon inscription</button>
                 </div>
             </form>
-            <?php
-            if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                $name = htmlspecialchars($_POST['fname']);
-                if (empty($name)) {
-                    echo "Name is empty";
-                } else {
-                    echo $name;
-                }
-            }
-            ?>
         </div>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
