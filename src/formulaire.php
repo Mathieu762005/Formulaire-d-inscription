@@ -1,33 +1,84 @@
 <?php
-$erreurs = [];
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // 1. Récupération et nettoyage des données
-    $nom = trim($_POST["nom"] ?? '');
-    $prenom = trim($_POST["prenom"] ?? '');
-    $email = trim($_POST["email"] ?? '');
-    $pays = trim($_POST["pays"] ?? '');
-    $message = trim($_POST["message"] ?? '');
-    $genre = $_POST["genre"] ?? '';
-    $cgu = isset($_POST["cgu"]) ? "Acceptées" : '';
+// var_dump($_POST);
 
-    // 2. Vérifications
-    if (empty($nom)) $erreurs[] = "Le champ 'Nom' est obligatoire.";
-    if (empty($prenom)) $erreurs[] = "Le champ 'Prénom' est obligatoire.";
-    if (empty($email)) $erreurs[] = "Le champ 'Email' est obligatoire.";
-    if (empty($pays)) $erreurs[] = "Le champ 'Pays' est obligatoire.";
-    if (empty($message)) $erreurs[] = "Le champ 'Message' est obligatoire.";
-    if (empty($genre)) $erreurs[] = "Le champ 'Genre' est obligatoire.";
-    if (empty($cgu)) $erreurs[] = "Vous devez accepter les CGU.";
+// Création de regeX
+$regName = "/^[a-zA-Zàèé\-]+$/";
 
-    // 3. Redirection si tout est OK
-    if (empty($erreurs)) {
+// Je ne lance qu'uniquement lorsqu'il y a un formulaire validée via la méthod POST
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    // je créé un tableau d'erreurs vide car pas d'erreur
+    $errors = [];
+
+    if (isset($_POST["nom"])) {
+        // on va vérifier si c'est vide
+        if (empty($_POST["nom"])) {
+            // si c'est vide, je créé une erreur dans mon tableau
+            $errors['nom'] = 'Nom obligatoire';
+        } else if (!preg_match($regName, $_POST["nom"])) {
+            // si ça ne respecte pas la regeX
+            $errors['nom'] = 'Caractère(s) non autorisé(s)';
+        }
+    }
+
+    if (isset($_POST["prenom"])) {
+        // on va vérifier si c'est vide
+        if (empty($_POST["prenom"])) {
+            // si c'est vide, je créé une erreur dans mon tableau
+            $errors['prenom'] = 'Prénom obligatoire';
+        } else if (!preg_match($regName, $_POST["prenom"])) {
+            // si ça ne respecte pas la regeX
+            $errors['prenom'] = 'Caractère(s) non autorisé(s)';
+        }
+    }
+
+    if (isset($_POST["email"])) {
+        // on va vérifier si c'est vide
+        if (empty($_POST["email"])) {
+            // si c'est vide, je créé une erreur dans mon tableau
+            $errors['email'] = 'Mail obligatoire';
+        } else if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+            // si mail non valide, on créé une erreur
+            $errors['email'] = 'Mail non valide';
+        }
+    }
+
+    if (isset($_POST["pays"])) {
+        // on va vérifier si c'est vide
+        if (empty($_POST["pays"])) {
+            // si c'est vide, je créé une erreur dans mon tableau
+            $errors['pays'] = 'Pays obligatoire';
+        } else if (!preg_match($regName, $_POST["pays"])) {
+            // si ça ne respecte pas la regeX
+            $errors['pays'] = 'Caractère(s) non autorisé(s)';
+        }
+    }
+
+    if (isset($_POST["message"])) {
+        // on va vérifier si c'est vide
+        if (empty($_POST["message"])) {
+            // si c'est vide, je créé une erreur dans mon tableau
+            $errors['message'] = 'Message obligatoire';
+        } else if (!filter_var($_POST["message"])) {
+            // si ça ne respecte pas la regeX
+            $errors['message'] = 'Caractère(s) non autorisé(s)';
+        }
+    }
+
+    if (!isset($_POST['cgu'])) {
+        $errors['cgu'] = 'cgu obligatoire';
+    }
+
+
+    if (empty($errors)) {
         header("Location: confirmation.php");
-        exit;
     }
 }
-?>
 
+
+
+?>
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -48,24 +99,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <div class="formulaire container border rounded-4 mt-5">
             <form class="row g-3 p-5" method="POST" action="" novalidate>
                 <div class="col-md-6">
-                    <label for="inputEmail4" class="form-label">Nom</label>
-                    <input type="text" name="nom" class="form-control" id="inputEmail4">
+                    <label for="inputEmail4" class="form-label">Nom</label><span class="ms-2 text-danger fst-italic fw-light"><?= $errors["nom"] ?? '' ?></span>
+                    <input type="text" name="nom" value="<?= $_POST["nom"] ?? "" ?>" class="form-control" id="inputEmail4">
                 </div>
                 <div class="col-md-6">
-                    <label for="inputPassword4" class="form-label">Prénom</label>
-                    <input type="text" name="prenom" class="form-control" id="inputPassword4">
+                    <label for="inputPassword4" class="form-label">Prénom</label><span class="ms-2 text-danger fst-italic fw-light"><?= $errors["prenom"] ?? '' ?></span>
+                    <input type="text" name="prenom" value="<?= $_POST["prenom"] ?? "" ?>" class="form-control" id="inputPassword4">
                 </div>
                 <div class="col-12">
-                    <label for="inputAddress" class="form-label">E-mail</label>
-                    <input type="email" name="email" class="form-control" id="inputAddress">
+                    <label for="inputAddress" class="form-label">E-mail</label><span class="ms-2 text-danger fst-italic fw-light"><?= $errors["email"] ?? '' ?></span>
+                    <input type="email" name="email" value="<?= $_POST["email"] ?? "" ?>" class="form-control" id="inputAddress">
                 </div>
                 <div class="col-md-6">
-                    <label for="inputCity" class="form-label">Pays</label>
+                    <label for="inputCity" class="form-label">Pays</label><span class="ms-2 text-danger fst-italic fw-light"><?= $errors["pays"] ?? '' ?></span>
                     <input type="text" name="pays" class="form-control" id="inputCity">
                 </div>
                 <div class="mb-3">
-                    <label for="exampleFormControlTextarea1" class="form-label">Message</label>
-                    <textarea class="form-control" name="message" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    <label for="exampleFormControlTextarea1" class="form-label">Message</label><span class="ms-2 text-danger fst-italic fw-light"><?= $errors["message"] ?? '' ?></span>
+                    <textarea class="form-control" name="message" id="exampleFormControlTextarea1" rows="3" placeholder="entre ton message"></textarea>
                 </div>
                 <div>
                     <input type="radio" name="genre" value="Homme" class="btn-check" id="option5" autocomplete="off" checked>
@@ -82,7 +133,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <input class="form-check-input" type="checkbox" name="cgu" id="gridCheck">
                         <label class="form-check-label" for="gridCheck">
                             CGU
-                        </label>
+                        </label><span class="ms-2 text-danger fst-italic fw-light"><?= $errors["cgu"] ?? '' ?></span>
                     </div>
                 </div>
                 <div class="col-12">
