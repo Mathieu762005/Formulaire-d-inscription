@@ -2,7 +2,7 @@
 $email = htmlspecialchars($_GET['email'] ?? 'Email non fourni');
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
