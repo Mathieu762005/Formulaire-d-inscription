@@ -67,7 +67,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (!isset($_POST['cgu'])) {
-        $errors['cgu'] = 'cgu obligatoire';
+        $errors['cgu'] = 'CGU obligatoire';
+    }
+
+    if (!isset($_POST['genre'])) {
+        $errors['genre'] = 'préciser votre genre';
     }
 
 
@@ -112,27 +116,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="col-md-6">
                     <label for="inputCity" class="form-label">Pays</label><span class="ms-2 text-danger fst-italic fw-light"><?= $errors["pays"] ?? '' ?></span>
-                    <input type="text" name="pays" class="form-control" id="inputCity">
+                    <input type="text" name="pays" value="<?= $_POST["pays"] ?? "" ?>" class="form-control" id="inputCity">
                 </div>
                 <div class="mb-3">
                     <label for="exampleFormControlTextarea1" class="form-label">Message</label><span class="ms-2 text-danger fst-italic fw-light"><?= $errors["message"] ?? '' ?></span>
-                    <textarea class="form-control" name="message" id="exampleFormControlTextarea1" rows="3" placeholder="entre ton message"></textarea>
+                    <textarea class="form-control" name="message" id="exampleFormControlTextarea1" rows="3" placeholder="entre ton message"><?= $_POST["message"] ?? "" ?></textarea>
                 </div>
                 <div>
-                    <input type="radio" name="genre" value="Homme" class="btn-check" id="option5" autocomplete="off" checked>
-                    <label class="btn" for="option5">Homme</label>
-
-                    <input type="radio" name="genre" value="Femme" class="btn-check" id="option6" autocomplete="off" checked>
-                    <label class="btn" for="option6">Femme</label>
-
-                    <input type="radio" name="genre" value="Autre" class="btn-check" id="option7" autocomplete="off" checked>
-                    <label class="btn" for="option7">Autre</label>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="genre" value="Homme" id="inlineRadio1">
+                        <label class="form-check-label" for="inlineRadio1">Homme</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="genre" value="Femme" id="inlineRadio1">
+                        <label class="form-check-label" for="inlineRadio1">Femme</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="genre" value="Ne pas précisé" id="inlineRadio1">
+                        <label class="form-check-label" for="inlineRadio1">Ne pas précisé</label><span class="ms-2 text-danger fst-italic fw-light"><?= $errors["genre"] ?? '' ?></span>
+                    </div>
                 </div>
                 <div class="col-12">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" name="cgu" id="gridCheck">
                         <label class="form-check-label" for="gridCheck">
-                            CGU
+                            accepte les CGU
                         </label><span class="ms-2 text-danger fst-italic fw-light"><?= $errors["cgu"] ?? '' ?></span>
                     </div>
                 </div>

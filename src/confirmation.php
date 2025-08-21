@@ -13,6 +13,11 @@
     <main class="container d-flex align-items-center justify-content-center">
         <h1 class="mt-5">le mail a bien été envoyé</h1>
     </main>
+    <div>
+        <a href="formulaire.php">
+            <button type="submit" class="btn btn-primary container d-flex align-items-center justify-content-center">Retour</button>
+        </a>
+    </div>
 </body>
 
 </html>
