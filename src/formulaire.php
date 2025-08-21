@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     if (empty($errors)) {
-        header("Location: confirmation.php"($_GET["email"]));
+        header("Location: confirmation.php?email=" . $_POST["email"]);
     }
 }
 
