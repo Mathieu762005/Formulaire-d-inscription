@@ -1,5 +1,4 @@
 <?php
-
 // var_dump($_POST);
 
 // Création de regeX
@@ -76,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     if (empty($errors)) {
-        header("Location: confirmation.php");
+        header("Location: confirmation.php"($_GET["email"]));
     }
 }
 

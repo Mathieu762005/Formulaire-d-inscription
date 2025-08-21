@@ -1,3 +1,6 @@
+<?php
+$email = htmlspecialchars($_GET['email'] ?? 'Email non fourni');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,7 +14,7 @@
 
 <body>
     <main class="container d-flex align-items-center justify-content-center">
-        <h1 class="mt-5">le mail a bien été envoyé</h1>
+        <h1 class="mt-5">le mail a bien été envoyé <?= $email ?></h1>
     </main>
     <div>
         <a href="formulaire.php">
